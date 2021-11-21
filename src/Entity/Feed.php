@@ -6,6 +6,7 @@ use App\Repository\FeedRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="`feed`")
  * @ORM\Entity(repositoryClass=FeedRepository::class)
  */
 class Feed
