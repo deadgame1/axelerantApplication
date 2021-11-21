@@ -30,11 +30,6 @@ class FeedController extends AbstractController
         return $this->render('feedList.html.twig', [
             'feedList' => $feedUrl,
         ]);
-
-        // return $this->json([
-        //     'message' => 'Welcome to your new controller!',
-        //     'path' => 'src/Controller/FeedController.php',
-        // ]);
     }
 
     /**
@@ -81,11 +76,6 @@ class FeedController extends AbstractController
         
         $this->em->flush();
 
-        // return $this->json([
-        //     'message' => $feedContent->getUrl(),
-        //     'success' => true
-        // ]);
-
         return $this->redirectToRoute('feedList');
     }
 
@@ -115,9 +105,6 @@ class FeedController extends AbstractController
 
         if(@simplexml_load_file($source)){
             $content = simplexml_load_file($source);
-            //echo '<pre>';
-            //print_r($content);
-            //print_r($content->channel->item[1]);exit;
             return $this->render('feedContent.html.twig', [
                 'error' => false,
                 'contentList' => $content->channel->item
