@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <meta charset="UTF-8">
+            <title>{% block title %}Welcome!{% endblock %}</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+            {# Run `composer require symfony/webpack-encore-bundle`
+            and uncomment the following Encore helpers to start using Symfony UX #}
+            {% block stylesheets %}
+                {#{{ encore_entry_link_tags('app') }}#}
+                <link rel="stylesheet" type="text/css" href="{{ asset('css/styles.css') }}"/>
+            {% endblock %}
+
+            {% block javascripts %}
+                {#{{ encore_entry_script_tags('app') }}#}
+            {% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+        <header>
+            <img src="{{ asset('axelerant-logo-flame.png') }}" onclick="window.location.href='{{ url('feedList') }}'"/>
+            <button id="" onclick="window.location.href='{{ url('feedList') }}'">
+                Feed List
+            </button>
+            {% if app.user %}
+            <button id="logoutbutton" onclick="window.location.href='{{ url('app_logout') }}'">
+                Logout
+            </button>
+            {% else %}
+            <button onclick="window.location.href={{ url('login') }}">
+                Login
+            </button>
+            {% endif %}
+        </header>
+        {% endblock %}
+    </body>
+</html>
