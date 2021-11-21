@@ -5,34 +5,42 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;     
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    /**
-     * @Route("/login", name="login")
-     */
-    public function index(AuthenticationUtils $authenticationUtils): Response
-      {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
+  /**
+   * @Route("/", name="home")
+   */
+  public function home(AuthenticationUtils $authenticationUtils): Response
+  {
+    return $this->redirectToRoute('feedList');
+  }
 
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
+  /**
+   * @Route("/login", name="login")
+   */
+  public function index(AuthenticationUtils $authenticationUtils): Response
+  {
+    // get the login error if there is one
+    $error = $authenticationUtils->getLastAuthenticationError();
 
-        return $this->render('index.html.twig', [
-            'controller_name' => 'LoginController',
-            'last_username' => $lastUsername,
-            'error'         => $error,
-        ]);
-      }
+    // last username entered by the user
+    $lastUsername = $authenticationUtils->getLastUsername();
 
-    /**
-    * @Route("/logout", name="app_logout", methods={"GET"})
-    */
-    public function logout(): void
-    {
-        // controller can be blank: it will never be called!
-        throw new \Exception('Don\'t forget to activate logout in security.yaml');
-    }
+    return $this->render('index.html.twig', [
+      'controller_name' => 'LoginController',
+      'last_username' => $lastUsername,
+      'error'         => $error,
+    ]);
+  }
+
+  /**
+   * @Route("/logout", name="app_logout", methods={"GET"})
+   */
+  public function logout(): void
+  {
+    // controller can be blank: it will never be called!
+    throw new \Exception('Don\'t forget to activate logout in security.yaml');
+  }
 }
