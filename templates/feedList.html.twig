@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+{% block head %}
+	{{ parent() }}
+	<style type="text/css">
+		tr:nth-child(even) {
+			background-color: #D6EEEE;
+		}
+		th {
+			font-weight: bold;
+		}
+		td {
+			font-weight: normal;
+		}
+		th,
+		td {
+			padding: 10px;
+		}
+		table {}
+		/* button {
+			cursor: pointer;
+		} */
+        td a{
+            color: black;
+            text-decoration:none;
+            margin: 0 20px 0 0;
+        }
+        td a img{
+            width: 15px;
+            margin-right: 5px;
+        }
+        #addbtn img{
+            width: 20px;
+            margin-right: 5px;
+        }
+        #addbtn{
+            display: flex;
+            align-items: center;   
+            cursor:pointer; 
+            color: blue;
+        }
+	</style>
+    {% block javascripts %}
+        <script>
+            var url = "{{ url('feedList') }}";
+            function editFeed(requestUrl,feedId){
+                var newUrl = prompt('Please enter the new url for this feed');
+                if(newUrl !== null){
+                    //sendajax
+                    //alert(requestUrl);return;
+                    postData(requestUrl, { feedUrl: newUrl })
+                    .then(data => {
+                        console.log(data); // JSON data parsed by `data.json()` call
+                        if(data['success'] == true){
+                            document.getElementById("elem_"+feedId).innerHTML = data.message;
+                        }else{
+                            alert('Update Failed');
+                        }
+                    });
+                }                
+            }
+            async function postData(url = '', data = {}) {
+                // Default options are marked with *
+                var formBody = [];
+                for (var property in data) {
+                    var encodedKey = encodeURIComponent(property);
+                    var encodedValue = encodeURIComponent(data[property]);
+                    formBody.push(encodedKey + "=" + encodedValue);
+                }
+                formBody = formBody.join("&");
+                const response = await fetch(url, {
+                    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                    mode: 'cors', // no-cors, *cors, same-origin
+                    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                    credentials: 'same-origin', // include, *same-origin, omit
+                    headers: {
+                        //'Content-Type': 'application/json'
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    redirect: 'follow', // manual, *follow, error
+                    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                    body: formBody // body data type must match "Content-Type" header
+                });
+                return response.json(); // parses JSON response into native JavaScript objects
+            }   
+            function onlyAdmin(){
+                alert('Only admins can do that');
+            }         
+        </script>
+    {% endblock %}
+</style>{% endblock %}
+{% block body %}
+{{ parent() }}
+<body>
+	<table>
+		<tr>
+			<th>Feed Id</th>
+			<th>Source Url</th>
+			<th>Action</th>
+            <th id="addbtn" onclick="window.location.href='{{ url('editFeed',{'feedId': 0}) }}'">
+                <img src="{{ asset('images/add.png') }}" /> Add Feed
+            </th>
+		</tr>
+		{% for feed in feedList %}
+			<tr>
+				<td>{{ feed.id }}</td>
+				<td id="elem_{{ feed.id }}">{{ feed.url }}</td>
+				<td>
+                    {# <button onclick=editFeed("{{ url('saveFeed',{'feedId': feed.id}) }}",{{ feed.id }});>
+						Edit
+					</button> #}
+                    {% if is_granted('ROLE_ADMIN') %}
+					<a href="{{ path('editFeed',{'feedId': feed.id}) }}" style="color:green;">
+						<img src="{{ asset('images/edit.png') }}" />Edit
+					</a>
+                    {% else %}
+                    <a href="" onclick="onlyAdmin();" style="cursor:not-allowed;color:grey;">
+						<img src="{{ asset('images/edit.png') }}" />Edit
+					</a>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+					<a href="{{ path('deleteFeed',{'feedId': feed.id}) }}" style="color:red;">
+						<img src="{{ asset('images/delete.png') }}" />Delete
+					</a>
+                    {% else %}
+                    <a href="" onclick="onlyAdmin();" style="cursor:not-allowed;color:grey;">
+						<img src="{{ asset('images/delete.png') }}" />Delete
+					</a>
+                    {% endif %}
+                    <a href="{{ path('viewFeed',{'feedUrl': feed.url}) }}" style="color:#fd00ff;">
+						<img src="{{ asset('images/view.png') }}" />View Content
+					</a>
+				</td>
+			</tr>
+		{% endfor %}
+
+	</table>
+</body>{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+{{ parent() }}
+<body>
+	<form class="" action="{{ path('saveFeed',{'feedId': id}) }}" method="post" style="margin: 20px;">
+            <label for="feedUrl">Enter Feed Source URL:</label>
+            <input type="text" id="feedUrl" name="feedUrl" value="{{ url }}" style="margin: 0 10px;padding: 8px;border-radius: 10px;width: 500px;"/>
+
+            {# If you want to control the URL the user is redirected to on success
+            <input type="hidden" name="_target_path" value="/account"/> #}
+
+            <button type="submit" style="color: green;">Save feed</button>
+            <button onclick="{{ url('feedList') }}" style="color: red;">Cancel</button>
+    </form>
+</body>{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{% block head %}
+	{{ parent() }}
+	<style type="text/css">
+		tr:nth-child(even) {
+			background-color: #D6EEEE;
+		}
+        tr:nth-child(odd) {
+			background-color: #8080803b;
+		}
+		th {
+			font-weight: bold;
+		}
+		td {
+			font-weight: normal;
+            vertical-align: top;
+		}
+		th,
+		td {
+			padding: 10px;
+		}
+        td a{
+            color: blue;
+            text-decoration:none;
+            margin: 0 20px 0 0;
+        }
+        td a img{
+            width: 15px;
+            margin-right: 5px;
+        }
+        .title{
+            min-width: 350px;
+        }
+        .link{
+            min-width: 150px;
+        }
+	</style>
+{% endblock %}
+{% block body %}
+	{{ parent() }}
+	<body>
+		{% if error %}
+			Error in source url.
+		{% else %}
+			<table>
+				<tr>
+                    <th>#</th>
+					<th class="title">Title</th>
+					<th class="link">Link</th>
+					<th>Description</th>
+				</tr>
+				{% for item in contentList %}
+					<tr>
+                        <td>{{ loop.index }}</td>
+						<td class="title">{{ item.title }}</td>
+						<td class="link"><a href="{{ item.link }}" target="_blank"> Open article </a></td>
+						<td>{{ item.description | raw}}</td>
+					</tr>
+				{% endfor %}
+
+			</table>
+        {% endif %}
+</body>
+{% endblock %}
