@@ -15,4 +15,4 @@ password - testpass
 
 username - user2
 
-password - testpass2
+password - testpass
