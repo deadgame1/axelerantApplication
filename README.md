@@ -1,4 +1,4 @@
-# axelerantApplication
+# app
 
 App demo link - http://tranquil-eyrie-26590.herokuapp.com/
 
